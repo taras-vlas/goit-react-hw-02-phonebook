@@ -16,10 +16,11 @@ class App extends Component {
        filter: "",
   };
 
+
   addContact = (contacts) => {
     const searchName = this.state.contacts
       .map((contact) => contact.name)
-      .includes(contacts.name);
+      .includes(contacts.name);    //значение true или false
        
     if (searchName) {
       alert(`${contacts.name} is already in contacts`);
@@ -36,20 +37,22 @@ class App extends Component {
   };
 
 
-  changeFilter = (filter) => {
-    this.setState({ filter });
+  // Подію на полі фільтра  пишемо в стейт
+  changeFilter = (event) => {                              
+    this.setState({ filter: event.target.value }); 
   };
+
 
   getVisibleContacts = () => {
     const { contacts, filter } = this.state;
 
-    return contacts.filter((contacts) =>
-      contacts.name.toLowerCase().includes(filter.toLowerCase())
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
 
-  DeleteContact = (contactId) => {
+  deleteContact = (contactId) => {
     this.setState((prevState) => {
       return {
         contacts: prevState.contacts.filter(({ id }) => id !== contactId),
@@ -57,11 +60,12 @@ class App extends Component {
     });
   };
 
+
   render() {
     const { filter } = this.state;
 
-    const visibleContacts = this.getVisibleContacts();
-     
+    const visibleContacts = this.getVisibleContacts(); //(5) [{…}, {…}, {…}, {…}, {…}]
+      console.log('visibleContacts', visibleContacts, 'visibleContacts.length',visibleContacts.length) 
     return (
         <div>
           <h1>Phonebook</h1>
@@ -69,12 +73,12 @@ class App extends Component {
           <ContactForm onAddContact={this.addContact} />
           <h2>Contacts</h2>
         
-          {visibleContacts.length > 0 && (
+          {/* {visibleContacts.length > 0 && (    ***знято!!! если искать по сочетанию букв по которому нет совпадений - пропадает инпут.  */} 
             <Filter value={filter} onChangeFilter={this.changeFilter} />
-          )}          
+          {/* )}           */}
             <ContactList
               contacts={visibleContacts}
-              onDeleteContact={this.DeleteContact}
+              onDeleteContact={this.deleteContact}
             />
           
         </div>
@@ -83,3 +87,9 @@ class App extends Component {
 }
 
 export default App;
+
+
+
+
+
+
